@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+        }
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f2f8f7;  /* Fondo suave y claro */
+        }
+        .container {
+            width: 600px; /* Contenedor más grande */
+            padding: 40px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e7e6;
+        }
+        h4 {
+            margin-bottom: 30px;
+            font-size: 26px;
+            color: #1e4894;  /* Azul fuerte para el título */
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #000000;  /* Color negro para las etiquetas */
+            font-size: 14px;  /* Tamaño de letra más pequeño */
+            text-transform: uppercase;  /* Mayúsculas */
+            text-align: center;  /* Centrado */
+            font-weight: bold;  /* Negrilla */
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #d6e5f0;
+            border-radius: 6px;
+            background-color: #f8f9fa;  /* Fondo de campo de entrada más suave */
+            color: #333;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        input:focus {
+            border-color: #1e4894;  /* Azul fuerte en el borde cuando está enfocado */
+            outline: none;
+        }
+        input[type="submit"] {
+            background-color: #7dc33f;  /* Verde brillante para el botón */
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            padding: 14px;
+            border-radius: 6px;
+        }
+        input[type="submit"]:hover {
+            background-color: #66b33d;  /* Verde más oscuro al pasar el mouse */
+        }
+        input[type="submit"]:active {
+            background-color: #58a636;  /* Verde más intenso cuando se hace clic */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="post" action="" name="contact-form">
+            <h4>Formulario de contacto</h4>
+            
+            <!-- Etiqueta para Placa -->
+            <label for="placa">INGRESE POR FAVOR LA PLACA DE SU VEHÍCULO</label>
+            <input type="text" id="placa" name="placa" placeholder="Placa" required>
+            
+            <!-- Etiqueta para Nombre -->
+            <label for="nombre">INGRESE POR FAVOR SU NOMBRE COMPLETO</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
+            
+            <!-- Etiqueta para Correo -->
+            <label for="gmail">INGRESE POR FAVOR SU CORREO ELECTRÓNICO</label>
+            <input type="email" id="gmail" name="gmail" placeholder="Correo electrónico" required>
+            
+            <input type="submit" value="Enviar" id="submit">
+        </form>            
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzwjaFglC2YOMJcbq9GbFtaZ6YkWnRZxTeFr0jnqo80yVqlUI_wuGiq6PqxAjczaXxw3A/exec';
+        const form = document.forms['contact-form'];
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();  // Previene el comportamiento por defecto del formulario
+            
+            // Mostrar alerta inmediata de gracias
+            alert("¡Gracias por diligenciar el formulario!");
+
+            // Mostrar el estado de "Cargando..."
+            const submitButton = document.getElementById('submit');
+            submitButton.disabled = true;  // Deshabilitar el botón mientras se envía
+            submitButton.value = 'Enviando...'; // Cambiar texto del botón a "Enviando..."
+            
+            // Obtener la fecha y hora actual
+            const fechaHora = new Date().toLocaleString();
+
+            // Añadir la fecha y hora al formulario como un campo adicional
+            const fechaInput = document.createElement('input');
+            fechaInput.type = 'hidden';  // Campo oculto
+            fechaInput.name = 'fecha_hora';
+            fechaInput.value = fechaHora;
+            form.appendChild(fechaInput);
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => {
+                    form.reset();  // Limpia los campos del formulario
+                    submitButton.disabled = false;  // Habilitar el botón de nuevo
+                    submitButton.value = 'Enviar';  // Restaurar el texto del botón
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    submitButton.disabled = false;  // Habilitar el botón de nuevo en caso de error
+                    submitButton.value = 'Enviar';  // Restaurar el texto del botón
+                });
+        });
+    </script>
+</body>
+</html>
